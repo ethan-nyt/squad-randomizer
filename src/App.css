@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  height: 100px;
+  padding-top: 25px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.squadLeadsControl {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
