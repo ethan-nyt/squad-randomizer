@@ -1,12 +1,14 @@
 .App {
   text-align: center;
+  font-family: 'Libre Baskerville', serif;
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #000;
   height: 100px;
   padding-top: 25px;
   color: white;
+  font-family: 'Libre Baskerville', serif;
 }
 
 .App-intro {
@@ -17,4 +19,8 @@
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+}
+
+.squad {
+  padding: 10px;
 }
