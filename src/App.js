@@ -141,11 +141,12 @@ class App extends Component {
             : null
           }
         </div>        
-        <Divider />
+        {/* <Divider /> */}
         <div id="squadListContainer">
           {
             randomizing ? <Loader active>Randomizing...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
               <div className="Squad">
+                { i === 0 ? <Divider /> : null }
                 <h2 className="Squad-leader">{name}'s Squad</h2>
                 <List>
                   { squads[i].map(squadMember => <List.Item key={`${squadMember}_${name}'s_Squad`}>{squadMember}</List.Item>) }
