@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { randomizer } from './randomizer';
 import { names as defaultNames, modes } from './constants';
-import { Dropdown, Button, List, Divider, Loader, Icon, Input } from 'semantic-ui-react';
+import { Dropdown, Button, List, Divider, Loader, Label, Icon, Input } from 'semantic-ui-react';
 import './App.css';
 
 class App extends Component {
@@ -63,31 +63,25 @@ class App extends Component {
 
   renderParticipantList = () => (
     <List>
-      {this.state.names.map(name => <List.Item>{name}</List.Item>)}
+      {this.state.names.map(name => <List.Item className="List-item">{name}</List.Item>)}
     </List>
   );
 
-  renderNameOption = (name, i) => <List.Item>{name}<Button size="mini" icon="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
+  renderNameOption = (name, i) => <List.Item className="List-item">{name}{' | '}<Button size="mini" icon="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
 
   renderListEditor = () => {
-    // make a copy of list of names
     const names = this.state.names.slice();
     return (
-      <div>
-        <List>
-          <List.Item>
-            <Input value={this.state.newName} onChange={this.changeNewName} action={{ disabled: this.state.newName.length < 1, size: 'small', color: 'teal', content: 'Add name', labelPosition: 'right', icon: 'plus', onClick: this.addNewName }} />
-          </List.Item>
-          { names.map((name, i) => this.renderNameOption(name, i)) }
-        </List>
+      <div id="Edit-List-container">
+        <Input id="New-name" value={this.state.newName} onChange={this.changeNewName} action={{ disabled: this.state.newName.length < 1, size: 'small', color: 'teal', content: 'Add name', labelPosition: 'right', icon: 'plus', onClick: this.addNewName }} />
+        <div id="Edit-list-subcontainer">
+          <List selection relaxed>
+            { names.map((name, i) => this.renderNameOption(name, i)) }
+          </List>
+        </div>
         <Button color="green" onClick={this.confirmParticipants} content="Done"/>
       </div>
-    )
-    // render a list of names
-    // each list item should have a "remove" button next to it
-      // onClick --> splice that item out of the list
-    // at the top of the list there should be an input and an "add" button
-      // onClick, add the input name to the list.
+    );
   }
 
   renderControls = () => {
@@ -131,7 +125,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Squad Shuffler</h2>
+          <h1><span id="Sub-header">Super-Duper</span>{' '}Squad Shuffler</h1>
         </div>
         {this.renderPrompt()}
         <div className="squadLeadsControl">
@@ -151,8 +145,8 @@ class App extends Component {
         <div id="squadListContainer">
           {
             randomizing ? <Loader active>Randomizing...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
-              <div className="squad">
-                <h2>{name}'s Squad</h2>
+              <div className="Squad">
+                <h2 className="Squad-leader">{name}'s Squad</h2>
                 <List>
                   { squads[i].map(squadMember => <List.Item key={`${squadMember}_${name}'s_Squad`}>{squadMember}</List.Item>) }
                 </List>
