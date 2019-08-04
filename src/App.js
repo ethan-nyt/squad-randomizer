@@ -156,7 +156,7 @@ class App extends Component {
         </div>        
         <div id="squadListContainer">
           {
-            randomizing ? <Loader active>Randomizing...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
+            randomizing ? <Loader active>Shuffling...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
               <div className="Squad">
                 { i === 0 ? <Divider /> : null }
                 <h2 className="Squad-leader">{name}'s Squad</h2>
