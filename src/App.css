@@ -2,19 +2,19 @@
   text-align: center;
 }
 
+#root {
+  background-color: seashell;
+  height: 100%;
+}
+
 .App-header {
-  background-color: #000;
-  color: white;
-  font-family: 'Righteous';
+  background-color: black;
 }
 
 .App-header > h1 {
   font-size: 50px;
-  color: #21ba45
-}
-
-.App-intro {
-  /* font-size: large; */
+  color: #21ba45;
+  font-family: 'Righteous', cursive;
 }
 
 .squadLeadsControl {
@@ -39,11 +39,13 @@
 
 #Sub-header {
   font-weight: bold;
-  font-size: 40px;
+  font-size: 30px;
   Color: #fbbd08;
+  font-family: 'Lobster';
+  margin-right: 2px;
 }
 
-.App, #New-name, #Sub-header, .List-item, h2, .ui.button, h1 {
+.App, #New-name, .List-item, h2, .ui.button, .popup {
   font-family: 'Righteous';
 }
 
@@ -59,6 +61,6 @@
   overflow-y: scroll;
   margin-top: 25px;
   margin-bottom: 25px;
-  margin-left: 300px;
-  margin-right: 300px;
+  margin-left: 25%;
+  margin-right: 25%;
 }

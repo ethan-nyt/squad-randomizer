@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { randomizer } from './randomizer';
-import { names as defaultNames, modes } from './constants';
-import { Dropdown, Button, List, Divider, Loader, Label, Icon, Input } from 'semantic-ui-react';
+import { modes } from './constants';
+import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'semantic-ui-react';
 import './App.css';
 
 class App extends Component {
   state = {
-    names: defaultNames,
+    names: this.props.defaultNames,
     newName: '',
     squadLeads: [],
     squads: [],
@@ -55,6 +55,13 @@ class App extends Component {
     });
   }
 
+  inputKeyHandler = (event) => {
+    const { keyCode } = event;
+    if (keyCode === 13 && this.state.newName.length) {
+      this.addNewName();
+    }
+  }
+
   renderPrompt = () => {
     const { mode } = this.state;
     const { confirm_squad_leads, confirm_participants } = modes;
@@ -67,13 +74,13 @@ class App extends Component {
     </List>
   );
 
-  renderNameOption = (name, i) => <List.Item className="List-item">{name}{' | '}<Button size="mini" icon="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
+  renderNameOption = (name, i) => <List.Item className="List-item">{name}{' | '}<Icon name="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
 
   renderListEditor = () => {
     const names = this.state.names.slice();
     return (
       <div id="Edit-List-container">
-        <Input id="New-name" value={this.state.newName} onChange={this.changeNewName} action={{ disabled: this.state.newName.length < 1, size: 'small', color: 'teal', content: 'Add name', labelPosition: 'right', icon: 'plus', onClick: this.addNewName }} />
+        <Input id="New-name" value={this.state.newName} onKeyUp={this.inputKeyHandler} onChange={this.changeNewName} action={{ disabled: this.state.newName.length < 1, size: 'small', color: 'teal', content: 'Add name', labelPosition: 'right', icon: 'plus', onClick: this.addNewName }} />
         <div id="Edit-list-subcontainer">
           <List selection relaxed>
             { names.map((name, i) => this.renderNameOption(name, i)) }
@@ -85,17 +92,23 @@ class App extends Component {
   }
 
   renderControls = () => {
-    const { mode, names } = this.state;
+    const { mode, names, squadLeads } = this.state;
     return mode === modes.confirm_squad_leads ? (
       <div>
-        <Dropdown
-          search
-          selection
-          multiple
-          closeOnChange
-          onChange={this.addSquadLead}
-          options={this.mapNamesToOptions(names)}
-          />
+        <Popup
+          trigger={<Dropdown
+            search
+            selection
+            multiple
+            closeOnChange
+            onChange={this.addSquadLead}
+            options={this.mapNamesToOptions(names)}
+            />}
+          position="right center"
+          content="select at least two squad leads."
+          size="mini"
+          open={this.state.squadLeads.length < 2}
+        />
       </div>
     ) : mode === modes.confirm_participants ? (
       <div>
@@ -125,7 +138,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h1><span id="Sub-header">Super-Duper</span>{' '}Squad Shuffler</h1>
+          <h1><span id="Sub-header">Super-Duper</span>Squad Shuffler</h1>
         </div>
         {this.renderPrompt()}
         <div className="squadLeadsControl">
@@ -141,7 +154,6 @@ class App extends Component {
             : null
           }
         </div>        
-        {/* <Divider /> */}
         <div id="squadListContainer">
           {
             randomizing ? <Loader active>Randomizing...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
@@ -151,7 +163,7 @@ class App extends Component {
                 <List>
                   { squads[i].map(squadMember => <List.Item key={`${squadMember}_${name}'s_Squad`}>{squadMember}</List.Item>) }
                 </List>
-                <Divider fitted />
+                { i === squadLeads.length - 1 ? null : <Divider fitted /> }
               </div>
             )) : null
           }
