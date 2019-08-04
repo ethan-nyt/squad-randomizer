@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export const randomizer = (names, numSquads) => {
+export default (names, numSquads) => {
     const squads = [];
     for (let i = 0; i < numSquads; i++) {
         squads.push([]);

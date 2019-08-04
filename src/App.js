@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { randomizer } from './randomizer';
+import shuffle from './shuffle';
 import { modes } from './constants';
 import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'semantic-ui-react';
 import './App.css';
@@ -24,7 +24,7 @@ class App extends Component {
   setSquads = () => {
     const { squadLeads, names } = this.state;
     const squadFollowers = names.filter(name => squadLeads.indexOf(name) < 0);
-    const squads = randomizer(squadFollowers, squadLeads.length);
+    const squads = shuffle(squadFollowers, squadLeads.length);
     this.setState({ randomizing: true }, () => {
       setTimeout(() => {
         this.setState({ squads, randomizing: false });
