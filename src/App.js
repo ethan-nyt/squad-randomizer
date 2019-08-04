@@ -87,7 +87,12 @@ class App extends Component {
             { names.map((name, i) => this.renderNameOption(name, i)) }
           </List>
         </div>
-        <Button color="green" onClick={this.confirmParticipants} content="Done"/>
+        <Popup
+          trigger={<Button disabled={names.length < 2} color="green" onClick={this.confirmParticipants} content="Done"/>}
+          open={names.length < 2}
+          content="Add more sprint participants"
+          position="right center"
+        />
       </div>
     );
   }
