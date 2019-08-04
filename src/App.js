@@ -3,10 +3,11 @@ import { randomizer } from './randomizer';
 import { modes } from './constants';
 import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'semantic-ui-react';
 import './App.css';
+import _ from 'lodash';
 
 class App extends Component {
   state = {
-    names: this.props.defaultNames,
+    names: this.props.defaultNames.sort(),
     newName: '',
     squadLeads: [],
     squads: [],
@@ -41,7 +42,7 @@ class App extends Component {
 
   changeNewName = (e, { value: newName }) => this.setState({ newName });
 
-  addNewName = () => this.setState({ names: [ this.state.newName, ...this.state.names], newName: '' });
+  addNewName = () => this.setState({ names: [ _.capitalize(this.state.newName), ...this.state.names].sort(), newName: '' });
 
   deleteName = idx => {
     const names = this.state.names.slice();
