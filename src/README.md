@@ -1,0 +1,13 @@
+# Super-Duper Squad Shuffler
+
+## What is it?
+A single-page application designed to help the NYTimes Care-Platforms team divide into randomly assigned squads during sprint planning.
+
+## Where can I try it?
+supershuffle.herokuapp.com
+
+## Feature Requests
+1. after shuffling, move specific names from one group to another (drag/drop?)
+2. integrate with slack API to share lists directly in #care-platforms
+3. Allow user to input squad names
+4. Add pictures or avatars for each squad participant

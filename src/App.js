@@ -5,13 +5,6 @@ import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'sem
 import './App.css';
 import _ from 'lodash';
 
-/* 
-  Feature requests:
-  1. after shuffling, move specific names from one group to another (drag/drop?)
-  2. integrate with slack API to share lists directly in #care-platforms
-  3. Allow user to input squad names
-*/
-
 class App extends Component {
   state = {
     names: this.props.defaultNames.sort(),
