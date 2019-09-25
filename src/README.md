@@ -12,3 +12,6 @@ A single-page application designed to help the NYTimes Care-Platforms team divid
 3. Allow user to input squad names
 4. Designate certain participants as FRM and ensure that two FRM's are not shuffled into the same squad.
 5. Add pictures or avatars for each squad participant
+
+## Setup
+`npm install` (in root project directory)
