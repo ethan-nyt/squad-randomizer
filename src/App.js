@@ -7,8 +7,9 @@ import _ from 'lodash';
 
 /* 
   Feature requests:
-  1. after shuffling, move specific names from one group to another
+  1. after shuffling, move specific names from one group to another (drag/drop?)
   2. integrate with slack API to share lists directly in #care-platforms
+  3. Allow user to input squad names
 */
 
 class App extends Component {
@@ -21,12 +22,23 @@ class App extends Component {
     mode: modes.confirm_participants,
   };
 
+  /**
+   * @param { Array } names
+   * @return { Array } each element in returned array is an object with keys for semantic ui dropdown option
+   */
   mapNamesToOptions = names => names.map((name, i) => ({ text: name, value: name, key: `${name}_squad_member${i}` }));
 
+  /**
+   * @param { Object } e click event
+   * @param { Array } value destructured/renamed to squadLeads, the user-inputted values to the squad leads dropdown
+   */
   addSquadLead = (e, { value: squadLeads }) => {
     this.setState({ squadLeads, squads: [] });
   }
 
+  /**
+   * Invokes shuffle utility function and sets state with list of randomly assigned squads.
+   */
   setSquads = () => {
     const { squadLeads, names } = this.state;
     const squadFollowers = names.filter(name => squadLeads.indexOf(name) < 0);
@@ -38,28 +50,56 @@ class App extends Component {
     });
   }
 
+  /**
+   * Resets application state.
+   */
   startOver = () => this.setState({ 
     mode: modes.confirm_participants,
     squadLeads: [],
     squads: []
   });
 
+  /**
+   * Sets state to move user to confirm squad leads mode.
+   */
   goToConfirmSquadLeads = () => this.setState({ mode: modes.confirm_squad_leads });
 
-  goToConfirmSquadParticipants = () => this.setState({ mode: modes.confirm_participants })
+  /**
+   * Sets state to move user to confirm participants mode.
+   */
+  goToConfirmParticipants = () => this.setState({ mode: modes.confirm_participants })
 
+  /**
+   * Sets state.newName based on input value
+   * @param { Object } e input onChange event
+   * @param { String } value destructured/renamed to newName, the user-inputted string.
+   */
   changeNewName = (e, { value: newName }) => this.setState({ newName });
 
+  /**
+   * adds new name to state.names and resets state.newName to empty string.
+   */
   addNewName = () => this.setState({ names: [ _.capitalize(this.state.newName), ...this.state.names].sort(), newName: '' });
 
+  /**
+   * Splices the name at the given index from state.names
+   * @param { Number } idx the index to splice out
+   */
   deleteName = idx => {
     const names = this.state.names.slice();
     names.splice(idx, 1);
     this.setState({ names });
   }
 
+  /**
+   * Sets state to move user to edit participants mode.
+   */
   editParticipants = () => this.setState({ mode: modes.edit_participants });
 
+  /**
+   * Key handler to allow user to hit enter key in order to add a new name to the list of participants.
+   * @param { Object } event keyUp event for input.
+   */
   inputKeyHandler = (event) => {
     const { keyCode } = event;
     if (keyCode === 13 && this.state.newName.length) {
@@ -67,20 +107,36 @@ class App extends Component {
     }
   }
 
+  /**
+   * Helper function to render prompt section of application.
+   * @return { HTML } to be rendered in the prompt area
+   */
   renderPrompt = () => {
     const { mode } = this.state;
     const { confirm_squad_leads, confirm_participants } = modes;
     return mode === confirm_squad_leads ? <h2>Who are the squad leads?</h2> : mode === confirm_participants ? <h2>Please confirm the list of participants for this sprint.</h2> : <h2>Add or remove sprint participants</h2>
   }
 
+  /**
+   * Helper function to render the list of participants
+   * @return { HTML } to be rendered in the participant list area.
+   */
   renderParticipantList = () => (
     <List>
       {this.state.names.map(name => <List.Item className="List-item">{name}</List.Item>)}
     </List>
   );
 
+  /**
+   * Helper function to render a specific list item in edit participants mode.
+   * @return { HTML } to be rendered in the participant list area.
+   */
   renderNameOption = (name, i) => <List.Item className="List-item">{name}{' | '}<Icon name="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
 
+  /**
+   * Helper function to render the Edit-List container.
+   * @return { HTML } to be rendered in edit participants mode.
+   */
   renderListEditor = () => {
     const names = this.state.names.slice();
     return (
@@ -92,7 +148,7 @@ class App extends Component {
           </List>
         </div>
         <Popup
-          trigger={<Button disabled={names.length < 2} color="green" onClick={this.goToConfirmSquadParticipants} content="Done"/>}
+          trigger={<Button disabled={names.length < 2} color="green" onClick={this.goToConfirmParticipants} content="Done"/>}
           open={names.length < 2}
           content="Add more sprint participants"
           position="right center"
@@ -101,6 +157,10 @@ class App extends Component {
     );
   }
 
+  /**
+   * Helper function to render user controls area of application.
+   * @return { HTML } to be rendered in the squadLeadsControls area.
+   */
   renderControls = () => {
     const { mode, names, squadLeads } = this.state;
     return mode === modes.confirm_squad_leads ? (
@@ -133,8 +193,16 @@ class App extends Component {
     ) : this.renderListEditor();
   }
 
+  /**
+   * Helper function to render the randomize button with dynamic text.
+   * @return { HTML } a button
+   */
   renderRandomizeButton = () => <Button color="teal" onClick={this.setSquads}><Icon name="random"/>Shuffle {this.state.squads.length ? 'Again' : 'Squads'}</Button>
   
+  /**
+   * Helper function to render a button group.
+   * @return { HTML } a button group
+   */
   renderButtonGroup = () => (
     <Button.Group>
       {this.renderRandomizeButton()}
