@@ -5,6 +5,12 @@ import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'sem
 import './App.css';
 import _ from 'lodash';
 
+/* 
+  Feature requests:
+  1. after shuffling, move specific names from one group to another
+  2. integrate with slack API to share lists directly in #care-platforms
+*/
+
 class App extends Component {
   state = {
     names: this.props.defaultNames.sort(),
@@ -38,7 +44,9 @@ class App extends Component {
     squads: []
   });
 
-  confirmParticipants = () => this.setState({ mode: modes.confirm_squad_leads });
+  goToConfirmSquadLeads = () => this.setState({ mode: modes.confirm_squad_leads });
+
+  goToConfirmSquadParticipants = () => this.setState({ mode: modes.confirm_participants })
 
   changeNewName = (e, { value: newName }) => this.setState({ newName });
 
@@ -50,11 +58,7 @@ class App extends Component {
     this.setState({ names });
   }
 
-  editParticipants = () => {
-    this.setState({
-      mode: modes.edit_participants,
-    });
-  }
+  editParticipants = () => this.setState({ mode: modes.edit_participants });
 
   inputKeyHandler = (event) => {
     const { keyCode } = event;
@@ -88,7 +92,7 @@ class App extends Component {
           </List>
         </div>
         <Popup
-          trigger={<Button disabled={names.length < 2} color="green" onClick={this.confirmParticipants} content="Done"/>}
+          trigger={<Button disabled={names.length < 2} color="green" onClick={this.goToConfirmSquadParticipants} content="Done"/>}
           open={names.length < 2}
           content="Add more sprint participants"
           position="right center"
@@ -121,7 +125,7 @@ class App extends Component {
         { this.renderParticipantList() }
         <br />
         <Button.Group>
-          <Button color="green" onClick={this.confirmParticipants}>Confirm</Button>
+          <Button color="green" onClick={this.goToConfirmSquadLeads}>Confirm</Button>
           <Button.Or />
           <Button color="yellow" onClick={this.editParticipants}>Edit</Button>
         </Button.Group>
