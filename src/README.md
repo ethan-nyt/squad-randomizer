@@ -15,3 +15,6 @@ A single-page application designed to help the NYTimes Care-Platforms team divid
 
 ## Setup
 `npm install` (in root project directory)
+
+## Run
+`npm start` (in root project directory)
