@@ -17,4 +17,4 @@ A single-page application designed to help the NYTimes Care-Platforms team divid
 `npm install` (in root project directory)
 
 ## Run
-`npm start // app will run on localhost:3000` (in root project directory)
+`npm start` (in root project directory)
