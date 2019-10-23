@@ -170,7 +170,7 @@ class App extends Component {
           position="right center"
           content="select at least two squad leads."
           size="mini"
-          open={this.state.squadLeads.length < 2}
+          open={squadLeads.length < 2}
         />
       </div>
     ) : mode === modes.confirm_participants ? (
@@ -190,7 +190,7 @@ class App extends Component {
    * Helper function to render the randomize button with dynamic text.
    * @return { HTML } a button
    */
-  renderRandomizeButton = () => <Button color="teal" onClick={this.setSquads}><Icon name="random"/>Shuffle {this.state.squads.length ? 'Again' : 'Squads'}</Button>
+  renderRandomizeButton = () => <Button color="teal" onClick={this.setSquads} disabled={this.state.squadLeads.length < 2} ><Icon name="random"/>Shuffle {this.state.squads.length ? 'Again' : 'Squads'}</Button>
   
   /**
    * Helper function to render a button group.
@@ -198,14 +198,14 @@ class App extends Component {
    */
   renderButtonGroup = () => (
     <Button.Group>
-      {this.renderRandomizeButton()}
+      { this.renderRandomizeButton() }
       <Button.Or />
       <Button color="blue" onClick={this.startOver}><Icon name="refresh"/>Start Over</Button>
     </Button.Group>
   );
 
   render() {
-    const { squadLeads, squads, randomizing } = this.state;
+    const { squadLeads, squads, randomizing, mode } = this.state;
     return (
       <div className="App">
         <div className="App-header">
@@ -216,10 +216,10 @@ class App extends Component {
           {this.renderControls()}
           <br/>
           {
-            squadLeads.length > 1 ? 
+            mode === modes.confirm_squad_leads  ? 
             <div>
               {
-                squads.length ? this.renderButtonGroup() : this.renderRandomizeButton()
+                this.renderButtonGroup()
               }
             </div>
             : null
