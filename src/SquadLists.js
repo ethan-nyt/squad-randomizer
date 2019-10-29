@@ -2,14 +2,18 @@ import React from 'react';
 import { List, Loader, Divider } from 'semantic-ui-react';
 
 export default class SquadLists extends React.Component {
-    onDragStart = () => console.log('drag start');
-    onDragEnd = () => console.log('drag end');
-    preventDefault = e => e.preventDefault();
-    onDragOver = e => {
-        e.preventDefault();
-        console.log('drag over');
+    onDragStart = (e) => {
+      console.log('drag start:', e.target.innerHTML);
+      e.dataTransfer.setData('name', e.target.innerHTML);
+      // todo splice this name out of whichever list is being dragged from.
     }
-    onDrop = () => console.log('drop');
+    preventDefault = e => e.preventDefault();
+    onDragOver = e => this.preventDefault(e);
+    onDrop = (e) => {
+      e.preventDefault();
+      console.log('drop', e.dataTransfer.getData('name'));
+      // todo push this name into whichever list is being dropped on.
+    };
     render() {
         const { randomizing, squadLeads, squads } = this.props;
         return (<div id="squadListContainer">

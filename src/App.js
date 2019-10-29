@@ -123,36 +123,6 @@ class App extends Component {
   );
 
   /**
-   * Helper function to render a specific list item in edit participants mode.
-   * @return { HTML } to be rendered in the participant list area.
-   */
-  renderNameOption = (name, i) => <List.Item className="List-item">{name}{' | '}<Icon name="delete" color="red" onClick={() => this.deleteName(i)} /></List.Item>
-
-  /**
-   * Helper function to render the Edit-List container.
-   * @return { HTML } to be rendered in edit participants mode.
-   */
-  renderListEditor = () => {
-    const names = this.state.names.slice();
-    return (
-      <div id="Edit-List-container">
-        <Input id="New-name" value={this.state.newName} onKeyUp={this.inputKeyHandler} onChange={this.changeNewName} action={{ disabled: this.state.newName.length < 1, size: 'small', color: 'teal', content: 'Add name', labelPosition: 'right', icon: 'plus', onClick: this.addNewName }} />
-        <div id="Edit-list-subcontainer">
-          <List selection relaxed>
-            { names.map((name, i) => this.renderNameOption(name, i)) }
-          </List>
-        </div>
-        <Popup
-          trigger={<Button disabled={names.length < 2} color="green" onClick={this.goToConfirmParticipants} content="Done"/>}
-          open={names.length < 2}
-          content="Add more sprint participants"
-          position="right center"
-        />
-      </div>
-    );
-  }
-
-  /**
    * Helper function to render user controls area of application.
    * @return { HTML } to be rendered in the squadLeadsControls area.
    */
@@ -166,6 +136,7 @@ class App extends Component {
       inputKeyHandler: this.inputKeyHandler,
       changeNewName: this.changeNewName,
       addNewName: this.addNewName,
+      deleteName: this.deleteName,
     };
     return mode === modes.confirm_squad_leads ? (
       <div>
@@ -237,7 +208,7 @@ class App extends Component {
             : null
           }
         </div>        
-        <SquadLists {...listProps} />
+        <SquadLists {...listProps} {...this.state} />
       </div>
     );
   }
