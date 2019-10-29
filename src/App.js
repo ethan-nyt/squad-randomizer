@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import shuffle from './shuffle';
 import { modes } from './constants';
 import { Dropdown, Button, List, Divider, Loader, Icon, Input, Popup } from 'semantic-ui-react';
+import SquadLists from './SquadLists';
+import ListEditor from './ListEditor';
 import './App.css';
 import _ from 'lodash';
 
@@ -155,7 +157,16 @@ class App extends Component {
    * @return { HTML } to be rendered in the squadLeadsControls area.
    */
   renderControls = () => {
-    const { mode, names, squadLeads } = this.state;
+    const { mode, names, newName, squadLeads } = this.state;
+    const listEditorProps = {
+      names,
+      newName,
+      goToConfirmParticipants: this.goToConfirmParticipants,
+      renderNameOption: this.renderNameOption,
+      inputKeyHandler: this.inputKeyHandler,
+      changeNewName: this.changeNewName,
+      addNewName: this.addNewName,
+    };
     return mode === modes.confirm_squad_leads ? (
       <div>
         <Popup
@@ -183,7 +194,7 @@ class App extends Component {
           <Button color="yellow" onClick={this.editParticipants}>Edit</Button>
         </Button.Group>
       </div>
-    ) : this.renderListEditor();
+    ) : <ListEditor {...listEditorProps} />;
   }
 
   /**
@@ -206,6 +217,7 @@ class App extends Component {
 
   render() {
     const { squadLeads, squads, randomizing, mode } = this.state;
+    const listProps = { squadLeads, squads, randomizing };
     return (
       <div className="App">
         <div className="App-header">
@@ -225,20 +237,7 @@ class App extends Component {
             : null
           }
         </div>        
-        <div id="squadListContainer">
-          {
-            randomizing ? <Loader active>Shuffling...</Loader> : squadLeads.length && squads.length ? squadLeads.map((name, i) => (
-              <div className="Squad">
-                { i === 0 ? <Divider /> : null }
-                <h2 className="Squad-leader">{name}'s Squad</h2>
-                <List>
-                  { squads[i].map(squadMember => <List.Item key={`${squadMember}_${name}'s_Squad`}>{squadMember}</List.Item>) }
-                </List>
-                { i === squadLeads.length - 1 ? null : <Divider fitted /> }
-              </div>
-            )) : null
-          }
-        </div>
+        <SquadLists {...listProps} />
       </div>
     );
   }
