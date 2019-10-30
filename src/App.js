@@ -186,9 +186,11 @@ class App extends Component {
     </Button.Group>
   );
 
+  setParentState = newState => this.setState({ ...newState });
+
   render() {
     const { squadLeads, squads, randomizing, mode } = this.state;
-    const listProps = { squadLeads, squads, randomizing };
+    const listProps = { squadLeads, squads, randomizing, setParentState: this.setParentState };
     return (
       <div className="App">
         <div className="App-header">
